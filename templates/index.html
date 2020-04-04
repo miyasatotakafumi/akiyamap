@@ -1,11 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map & Geolocation</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 1640px;
+      height: 1500px;
+    }
+  </style>
 </head>
+
 <body>
-    
+
+  <!-- Map -->
+  <div id="map"></div>
+  <!-- Map -->
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_79J60N0C8A6BiY2PNHMlU8gI4bHS1eI&callback=initMap" async defer></script>
+  <script>
+    var map; //mapオブジェクト保管用
+
+    //1．位置情報の取得に成功した時の処理
+    function mapsStart(position) {
+
+      //lat=緯度、lon=経度 を取得 
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+
+      // オランダの緯度経度をlat2とlon2でセット
+      var lat2 = 32.995315; 
+      var lon2 = 129.758527;
+
+      //物件a
+      var lat3 = 32.995330; 
+      var lon3 = 129.758560;
+
+      //物件b
+      var lat4 = 32.895330;; 
+      var lon4 = 129.558560;
+
+      //div#mapを「GoogleMap」化
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: lat2, lng: lon2 }, //緯度,経度を設定
+        zoom: 13 //Zoom値設定
+      });
+
+      //プッシュピンを置く
+      const beachMarker = new google.maps.Marker({
+        position: { lat: lat2 + 0.001, lng: lon2 + 0.001 },
+        map: map,
+        icon: 'img/maps_pin.png'
+      });
+
+              //物件の場所にピンを置く
+              const beachMarker1 = new google.maps.Marker({
+                position: { lat: lat3 + 0.005, lng: lon3 + 0.005 },
+                map: map,
+                icon: 'img/vgboy.png'
+              });
+
+               //物件の場所にピンを置く
+               const beachMarker2 = new google.maps.Marker({
+                position: { lat: lat4 + 0.005, lng: lon4 + 0.005 },
+                map: map,
+                icon: 'img/vgboy.png'
+              });
+
+              
+              
+
+
+
+    };
+
+    //2． 位置情報の取得に失敗した場合の処理
+    function mapsError(error) {
+      var e = "";
+      if (error.code == 1) { //1＝位置情報取得が許可されてない（ブラウザの設定）
+        e = "位置情報が許可されてません";
+      }
+      if (error.code == 2) { //2＝現在地を特定できない
+        e = "現在位置を特定できません";
+      }
+      if (error.code == 3) { //3＝位置情報を取得する前にタイムアウトになった場合
+        e = "位置情報を取得する前にタイムアウトになりました";
+      }
+      alert("エラー：" + e);
+    };
+
+    //3.位置情報取得オプション
+    var set = {
+      enableHighAccuracy: true, //より高精度な位置を求める
+      maximumAge: 20000,        //最後の現在地情報取得が20秒以内であればその情報を再利用する設定
+      timeout: 10000            //10秒以内に現在地情報を取得できなければ、処理を終了
+    };
+
+    //Main:位置情報を取得する処理 //getCurrentPosition :or: watchPosition
+    function initMap() {
+      navigator.geolocation.watchPosition(mapsStart, mapsError, set);
+    }
+  </script>
 </body>
+
 </html>
