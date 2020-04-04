@@ -24,7 +24,9 @@
 <body>
 
   <!-- Map -->
-  <div id="map"></div>
+  <div id="map" >
+    <div id="map2"></div>
+ </div>
   <!-- Map -->
 
 
@@ -62,8 +64,11 @@
       const beachMarker = new google.maps.Marker({
         position: { lat: lat2 + 0.001, lng: lon2 + 0.001 },
         map: map,
-        icon: 'img/maps_pin.png'
+        icon: 'img/maps_pin.png'        
       });
+
+
+      
 
               //物件の場所にピンを置く
               const beachMarker1 = new google.maps.Marker({
@@ -112,6 +117,9 @@
     function initMap() {
       navigator.geolocation.watchPosition(mapsStart, mapsError, set);
     }
+  </script>
+  <script>
+      $('#map div').attr('class','detail');
   </script>
 </body>
 
