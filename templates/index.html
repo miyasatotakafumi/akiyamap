@@ -36,6 +36,8 @@
     var map; //mapオブジェクト保管用
     var marker; 
     var infoWindow; //吹き出し
+    var infoWindow1; //吹き出し
+    var infoWindow2; //吹き出し
 
     //1．位置情報の取得に成功した時の処理
     function mapsStart(position) {
@@ -90,12 +92,21 @@
                       beachMarker.addListener('click', function() { // マーカーをクリックしたとき
                       infoWindow.open(map, beachMarker); // 吹き出しの表示
                   });
+                                  //あとで削除
+                                        infoWindow1 = new google.maps.InfoWindow({ // 吹き出しの追加
+                                            content: '<div class="sample">2LDK 築5年 一軒家</div>' // 吹き出しに表示する内容
+                                      });
+                                      beachMarker1.addListener('click', function() { // マーカーをクリックしたとき
+                                      infoWindow.open(map, beachMarker1); // 吹き出しの表示
+                                  });
 
+                                     infoWindow2 = new google.maps.InfoWindow({ // 吹き出しの追加
+                                            content: '<div class="sample">4LDK</div>' // 吹き出しに表示する内容
+                                      });
+                                      beachMarker2.addListener('click', function() { // マーカーをクリックしたとき
+                                      infoWindow.open(map, beachMarker2); // 吹き出しの表示
+                                  });
 
-
-
-
-    
     };
 
 
