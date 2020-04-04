@@ -35,22 +35,53 @@
     //1．位置情報の取得に成功した時の処理
     function mapsStart(position) {
 
-      //lat=緯度、lon=経度 を取得
+      //lat=緯度、lon=経度 を取得 
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
 
+      // オランダの緯度経度をlat2とlon2でセット
+      var lat2 = 32.995315; 
+      var lon2 = 129.758527;
+
+      //物件a
+      var lat3 = 32.995330; 
+      var lon3 = 129.758560;
+
+      //物件b
+      var lat4 = 32.895330;; 
+      var lon4 = 129.558560;
+
       //div#mapを「GoogleMap」化
       map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: lat, lng: lon }, //緯度,経度を設定
-        zoom: 15 //Zoom値設定
+        center: { lat: lat2, lng: lon2 }, //緯度,経度を設定
+        zoom: 13 //Zoom値設定
       });
 
       //プッシュピンを置く
       const beachMarker = new google.maps.Marker({
-        position: { lat: lat + 0.001, lng: lon + 0.001 },
+        position: { lat: lat2 + 0.001, lng: lon2 + 0.001 },
         map: map,
         icon: 'img/maps_pin.png'
       });
+
+              //物件の場所にピンを置く
+              const beachMarker1 = new google.maps.Marker({
+                position: { lat: lat3 + 0.005, lng: lon3 + 0.005 },
+                map: map,
+                icon: 'img/vgboy.png'
+              });
+
+               //物件の場所にピンを置く
+               const beachMarker2 = new google.maps.Marker({
+                position: { lat: lat4 + 0.005, lng: lon4 + 0.005 },
+                map: map,
+                icon: 'img/vgboy.png'
+              });
+
+              
+              
+
+
 
     };
 
