@@ -1,25 +1,6 @@
-from flask import Flask, render_template, redirect, secret_key
+from flask import Flask, render_template
 
 app= Flask(__name__)
-
-@app.route('/')
-
-def main():
-// スクレイピング処理pyの呼び出し　-> 管理者が手動でやる、main.pyではしない
-// 表示時には、すでにDBに値が入っている前提
-// DBから名前と緯度と経度の値をとる
-
-// GoogleMapAPIにKeyを渡す
-
-// HTMLに名前と緯度経度を渡す　表示はrender_templateを使う
-
-
-// GoogleMap初期地設定～表示まではHTML側で行う
-// 検索Boxからの入力受け取り、値チェック
-
-// ページ更新？
-
-// 
 
 # ----スクレイピング------------
 import requests
@@ -65,3 +46,36 @@ df2.to_csv(filename, encoding = 'utf-8-sig') #encoding指定しないと、エ�
 files.download(filename)
 
 # ------スクレイピングここまで--------------
+
+# ------表示時の実行処理ここから--------------
+@app.route('/')
+
+def main():
+# result.csvから名前（住所）の値をとる
+    with open('result.csv', newline='', encoding='utf-8') as csv_data:
+        datareader = csv.reader(csv_data, delimiter=',', lineterminator='\r\n')
+        print(csv_data)
+        name_data = [["col1", "col2","col3","col4"]]
+        names = []
+        for row in datareader:
+            n = datareader.line_num
+            print(n)
+            if(n % 6 == 3):
+                name_data.append(row)
+                names.append(row[3]) #csvで3つ目の列に住所が入っているという想定
+            else:
+                continue
+
+# これはテスト用のreturn
+        return render_template("index.html", data=names)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+# 次やること、緯度latと経度lonを取得
+# GoogleMapAPIにKeyを渡す
+# HTMLに名前と緯度経度を渡す　表示はrender_templateを使う
+# GoogleMap初期地設定～表示まではHTML側で行う
+# 検索Boxからの入力受け取り、値チェック
+
+# ------表示時の実行処理ここまで--------------
