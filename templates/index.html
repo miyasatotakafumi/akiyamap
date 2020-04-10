@@ -20,6 +20,7 @@
   </style>
    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_79J60N0C8A6BiY2PNHMlU8gI4bHS1eI&callback=initMap" async defer></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</script>
 </head>
 
 <body>
@@ -46,6 +47,9 @@
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
 
+     
+
+
       // オランダの緯度経度をlat2とlon2でセット
       var lat2 = 32.995315; 
       var lon2 = 129.758527;
@@ -61,8 +65,269 @@
       //div#mapを「GoogleMap」化
       map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: lat2, lng: lon2 }, //緯度,経度を設定
-        zoom: 13 //Zoom値設定
+        zoom: 13, //Zoom値設定
+        //style 
+        styles:
+        [
+     {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#ebe3cd"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#523735"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#f5f1e6"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#c9b2a6"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#dcd2be"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#ae9e90"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#dfd2ae"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#749d6b"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#dfd2ae"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#93817c"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#a5b076"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#447530"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f5f1e6"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#fdfcf8"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f8c967"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#e9bc62"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway.controlled_access",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e98d58"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway.controlled_access",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#db8555"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#806b63"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#dfd2ae"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#8f7d77"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#ebe3cd"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#dfd2ae"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#b9d3c2"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#92998d"
+      }
+    ]
+  }
+]
+        //styleここまで
       });
+
+
+   //配列表記
+  var data = new Array();
+      data.push({lat:'33.005963', lng:'129.814619', name:'無人島田島　片山智弘'});
+      data.push({lat:'32.993740', lng:'129.810136', name:'SDGsナビゲーター　長谷川星香'});
+      data.push({lat:'32.992381', lng:'129.808606', name:'国際宇宙ステーションの人　長谷川純一'});
+      data.push({lat:'32.971183', lng:'129.823176', name:'建築家池田武邦の終のすみか　池田武邦'});
+      data.push({lat:'33.007290', lng:'129.791708', name:'フィトセラピスト　村山みほ'});
+      data.push({lat:'32.989228', lng:'129.782924', name:'ハウステンボス創設者　神近義邦'});
+      console.log(data); 
+      //配列表記ここまで
+
+    //   //変数 map2の定義
+    // map2 = new google.maps.Map(document.getElementById("maps"), map);
+
+    // マーカーの作成（0からデータの数分まで）
+    for (i = 0; i < data.length; i++) {
+     　create_marker(data[i].lat, data[i].lng);
+     }
+
+      // 関数 create_marker
+      function create_marker(lat, lng){
+      　//変数 marker_options
+      　var marker_options = {
+        　map: map,
+          position: new google.maps.LatLng(lat, lng),
+          zIndex: 0,
+        };
+        // 変数 marker
+        var marker = new google.maps.Marker(marker_options);
+      }
+
+
 
         //1.5 プッシュピンを置く
     const beachMarker = new google.maps.Marker({
