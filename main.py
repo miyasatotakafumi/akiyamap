@@ -1,4 +1,7 @@
 from flask import Flask, render_template
+import csv
+from pygeocoder import Geocoder
+import googlemaps
 
 app= Flask(__name__)
 
@@ -48,34 +51,53 @@ files.download(filename)
 # ------スクレイピングここまで--------------
 
 # ------表示時の実行処理ここから--------------
-@app.route('/')
+@app.route("/")
 
 def main():
+
+    googleapikey = "AIzaSyB_79J60N0C8A6BiY2PNHMlU8gI4bHS1eI"
+    gmaps = googlemaps.Client(key=googleapikey)
+    loc_data = []
+
 # result.csvから名前（住所）の値をとる
     with open('result.csv', newline='', encoding='utf-8') as csv_data:
         datareader = csv.reader(csv_data, delimiter=',', lineterminator='\r\n')
         print(csv_data)
-        name_data = [["col1", "col2","col3","col4"]]
+        name_data = [[]]
         names = []
         for row in datareader:
             n = datareader.line_num
-            print(n)
-            if(n % 6 == 3):
+            if(n > 3 and n % 6 == 3):
                 name_data.append(row)
                 names.append(row[3]) #csvで3つ目の列に住所が入っているという想定
             else:
                 continue
 
-# これはテスト用のreturn
-        return render_template("index.html", data=names)
+# ここから緯度と経度を取る処理　GoogleMapAPIKeyを使う場合
+#        for location in names[0:]:
+#                print(location)
+#            geocode_result = gmaps.geocode(location)
+            geocode_result = gmaps.geocode('大瀬戸町松島内郷352番地')
+            # loc
+#                loc = location[3]
+            # lat
+#                lat = geocode_result[0]["geometry"]["location"]["lat"]
+            # lng
+#                lng = geocode_result[0]["geometry"]["location"]["lng"]
+#                loc_data.append({'loc': loc, 'lat': lat, 'lng': lng})
+
+
+# index.htmlに出力(こっちはテスト用)
+        return render_template("index.html", data=loc_data)
+
+#  index.htmlに出力（HTMLに名前と緯度経度を渡す　表示はrender_templateを使う）
+#        return render_template("index.html", GoogleMapApiKey=googlemapapikey , data=loc_data)
 
 if __name__ == "__main__":
     app.run(debug=True)
 
-# 次やること、緯度latと経度lonを取得
-# GoogleMapAPIにKeyを渡す
-# HTMLに名前と緯度経度を渡す　表示はrender_templateを使う
 # GoogleMap初期地設定～表示まではHTML側で行う
 # 検索Boxからの入力受け取り、値チェック
 
+# ページ更新？
 # ------表示時の実行処理ここまで--------------
