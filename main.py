@@ -9,6 +9,8 @@ app= Flask(__name__)
 # ----スクレイピング------------
 import requests
 from bs4 import BeautifulSoup as bs4
+import pandas as pd
+from google.colab import files
 
 #html_doc = requests.get("https://www.city.saikai.nagasaki.jp/kurashi/jutaku/2/2377.html").text
 #soup = BeautifulSoup(html_doc, 'html.parser') # BeautifulSoupの初期化
@@ -24,12 +26,11 @@ for tr in real_page_tags:  # 繰り返しでtrタグの中のタグを取得
     # print(td.p)
     # print(td.img)
 
-import pandas as pd
-from google.colab import files
-# データフレームを作成してください。列名は、name, urlです。
-# columns = ["写真", "所在地","区分","売却価格/賃料","構造","詳細"]
-columns = [img,name1,name2]
-df2 = pd.DataFrame(columns=columns)
+    # データフレームを作成してください。列名は、name, urlです。
+    # columns = ["写真", "所在地","区分","売却価格/賃料","構造","詳細"]
+    columns = ["img","name1","name2"]
+    df2 = pd.DataFrame(columns=columns) #列名を指定している
+
 # 記事名と記事URLをデータフレームに追加してください
 for tr in real_page_tags:  # 繰り返しでtrタグの中のタグを取得
   tds = tr.find_all("td")
@@ -42,12 +43,26 @@ for tr in real_page_tags:  # 繰り返しでtrタグの中のタグを取得
     name1 = td.string
     name2 = td.p
     se = pd.Series([img,name1,name2], columns)
-    print(se)
+    # print(se)
     df2 = df2.append(se, columns)
+    df3 = df2.reset_index().T.reset_index().T.values.tolist() #行・列を配列に変換
+# print([x for x in df3 if x != None]) #df3の配列に存在する空要素""を除去
+dst = [] #空の配列を設定
+for block in df3: #df3の中のblock(配列）を繰り返し以下を読み取る
+    new_block = [x for x in block if x != None] #blockの要素にNoneがあれば取り除く
+    dst.append(new_block) #空の配列にNoneを除いた配列を挿入
+df3 = dst #df3にdstを代入
+print(df3)
+
+columns_fix=["block","block2","block3","block4"]
+df3_fix = pd.DataFrame(df3,columns=columns_fix) #列名を指定している
+print(df3_fix)
+
 # result.csvという名前でCSVに出力してください。
 filename = "result.csv"
-df2.to_csv(filename, encoding = 'utf-8-sig') #encoding指定しないと、エラーが起こります。おまじないだともって入力します。
+df3_fix.to_csv(filename, encoding = 'utf-8-sig') #encoding指定しないと、エラーが起こります。おまじないだともって入力します。
 files.download(filename)
+
 
 # ------スクレイピングここまで--------------
 
