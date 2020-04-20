@@ -18,7 +18,7 @@
       height: 1500px;
     }
   </style>
-   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_79J60N0C8A6BiY2PNHMlU8gI4bHS1eI&callback=initMap" async defer></script>
+   <script src="https://maps.googleapis.com/maps/api/js?key={{GoogleMapApiKey}}&callback=initMap" async defer></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </script>
 </head>
@@ -39,6 +39,11 @@
     var infoWindow; //吹き出し
     var infoWindow1; //吹き出し
     var infoWindow2; //吹き出し
+
+    //追加    配列の受け取り
+     var data = {{data|tojson}};
+     console.log(data); 
+
 
     //1．位置情報の取得に成功した時の処理
     function mapsStart(position) {
@@ -297,14 +302,15 @@
 
 
    //配列表記
-  var data = new Array();
-      data.push({lat:'33.005963', lng:'129.814619', name:'無人島田島　片山智弘'});
-      data.push({lat:'32.993740', lng:'129.810136', name:'SDGsナビゲーター　長谷川星香'});
-      data.push({lat:'32.992381', lng:'129.808606', name:'国際宇宙ステーションの人　長谷川純一'});
-      data.push({lat:'32.971183', lng:'129.823176', name:'建築家池田武邦の終のすみか　池田武邦'});
-      data.push({lat:'33.007290', lng:'129.791708', name:'フィトセラピスト　村山みほ'});
-      data.push({lat:'32.989228', lng:'129.782924', name:'ハウステンボス創設者　神近義邦'});
-      console.log(data); 
+  // var data = new Array();
+      var data1 = data;
+       data1.push({lat:'33.005963', lng:'129.814619', name:'無人島田島　片山智弘'});
+      // data.push({lat:'32.993740', lng:'129.810136', name:'SDGsナビゲーター　長谷川星香'});
+      // data.push({lat:'32.992381', lng:'129.808606', name:'国際宇宙ステーションの人　長谷川純一'});
+      // data.push({lat:'32.971183', lng:'129.823176', name:'建築家池田武邦の終のすみか　池田武邦'});
+      // data.push({lat:'33.007290', lng:'129.791708', name:'フィトセラピスト　村山みほ'});
+      // data.push({lat:'32.989228', lng:'129.782924', name:'ハウステンボス創設者　神近義邦'});
+      console.log(data1); 
       //配列表記ここまで
 
     //   //変数 map2の定義
@@ -321,8 +327,7 @@
       　var marker_options = {
         　map: map,
           position: new google.maps.LatLng(lat, lng),
-          zIndex: 0,
-        };
+          zIndex: 0,        };
         // 変数 marker
         var marker = new google.maps.Marker(marker_options);
       }
