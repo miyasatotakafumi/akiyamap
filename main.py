@@ -87,16 +87,17 @@ def main():
         names = []
         for row in datareader:
             n = datareader.line_num
-            if(n > 3 and n % 6 == 3):
+            if(n > 4 and n % 6 == 4):
                 name_data.append(row)
-                row[3].strip('</p>')
-                names.append(row[3]) #csvで3つ目の列に住所が入っているという想定
+                a=row[2].strip('</p>\xa0')
+                names.append(a) #csvで3つ目の列に住所が入っているという想定
+                print(names)
             else:
                 continue
 
 # ここから緯度と経度を取る処理
         for locationname in names:
-                print(locationname)
+#                print(locationname)
                 try:
                     geocode_result = gmaps.geocode(locationname)
 #                   geocode_result = gmaps.geocode('大瀬戸町松島内郷352番地')
@@ -109,9 +110,6 @@ def main():
                     loc_data.append({'loc': loc, 'lat': lat, 'lng': lng})
                 except:
                     print('ERROR') # エラー処理はひとまずまとめておく
-
-# index.htmlに出力(こっちはテスト用)
-#        return render_template("index.html", data=loc_data)
 
 #  index.htmlに出力（HTMLに名前と緯度経度を渡す　表示はrender_templateを使う）
         return render_template("index.html", GoogleMapApiKey=googlemapapikey , data=loc_data)
