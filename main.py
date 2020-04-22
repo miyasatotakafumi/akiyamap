@@ -90,8 +90,10 @@ def main():
             if(n > 4 and n % 6 == 4):
                 name_data.append(row)
                 a=row[2].strip('</p>\xa0')
-                names.append(a) #csvで3つ目の列に住所が入っているという想定
+                b=a.replace('\xa0（中戸）','')
+                names.append(b) #csvで3つ目の列に住所が入っているという想定
                 print(names)
+
             else:
                 continue
 
