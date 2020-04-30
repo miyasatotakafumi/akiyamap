@@ -5,30 +5,212 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Map & Geolocation</title>
   <style>
-    body {
+   body {
       margin: 0;
       padding: 0;
+    }
+    #top {
+      position: absolute;
+      top:0px;
+      left: 0px;
+      width: 1640px;
+      height: 20px;
     }
 
     #map {
       position: absolute;
-      top: 0px;
+      top: 60px;
       left: 0px;
       width: 1640px;
       height: 1500px;
-    }
+    }   
+
+    /* css */
+
+.main_visual bg_aaa{
+  position: absolute;
+      top: 20px;
+      left: 0px;
+      width: 1640px;
+      height:20px;
+}
+      
+.modal_open{
+    display: inline-block;
+    margin: 3vw;
+    float: left; 
+}
+ 
+.modal_box {
+    position: fixed;
+    z-index: 7777;
+    display: none;
+    width: 80%;
+    max-width: 840px;
+    margin: 0;
+    padding: 60px 2vw 80px;
+    border: 2px solid #aaa;
+    text-align: center;
+    background: #fff;
+    box-sizing: border-box;
+}
+ 
+.modal_close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    width: 62px;
+    font-size: 46px;
+    color: #000;
+    line-height: 62px;
+    text-align: center;
+    background: #e6e6e6;
+}
+ 
+.modal_close i {
+    line-height: 62px;
+    vertical-align: bottom;
+}
+ 
+.modal_bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 6666;
+    display: none;
+    width: 100%;
+    height: 120%;
+    background-color: rgba(0,0,0,0.7);
+}
+ 
+.link_area {
+    overflow: hidden;
+    max-width: 410px;
+    margin: 60px auto 0;
+    text-align: center;
+}
+ 
+.link_area .modal_link {
+    display: inline;
+}
+ 
+.link_area .modal_link a {
+    display: inline-block;
+    width: 180px;
+    color: #000;
+    line-height: 2.5;
+    text-decoration: none;
+    margin: 0 10px;
+    background: #e6e6e6;
+}
+ 
+.link-area ul li.modal_link:first-child a {
+    float: left;
+}
+ 
+.link-area ul li.modal_link:last-child a {
+    float: right;
+}
+ 
+ 
+@media screen and (max-width: 769px) {
+ 
+/*  ウィンドウサイズ769px以下の時のスタイル  */
+ 
+  .modal_box {
+      padding: 50px 2vw 40px;
+  }
+ 
+  .modal_close {
+      width: 40px;
+      line-height: 40px;
+      font-size: 30px;
+  }
+ 
+  .modal_close i {
+      line-height: 44px;
+  }
+ 
+  .link_area {
+      margin: 25px auto 0;
+  }
+ 
+  .link_area .modal_link a {
+      margin: 15px auto 0;
+  }
+ 
+  .link_area ul li.modal_link:first-child a {
+      float: none;
+      margin-top: 0;
+  }
+ 
+  .link_area ul li.modal_link:last-child a {
+      float: none;
+  }
+ }
+
+
   </style>
    <script src="https://maps.googleapis.com/maps/api/js?key={{GoogleMapApiKey}}&callback=initMap" async defer></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-</script>
+   <script type="text/javascript" src="templates/mapstyle.js"></script>
+   <!--   <link rel="stylesheet" type="text/css" href="style.css" media="screen" /> -->
+   <script src="func.js"></script> 
 </head>
 
 <body>
 
   <!-- Map -->
+  <!-- <div id="top">
+    <button id=".modal_open">物件一覧を表示する</button></div> -->
   <div id="map" >
-    <div id="map2"></div>
- </div>
+    </div>
+<!-- モーダル -->
+       <div id="demoslide01" class="main_visual bg_aaa">
+          <button><a data-target="modal1" class="modal_open">物件一覧</a></button>
+        </div>
+         
+        <!-- モーダル1 -->
+         <div id="modal1" class="modal_box">
+          <h2>物件一覧</h2>
+          <p>物件一覧ページ</p>
+         
+          <div class="link_area">
+            <p class="modal_link"><a data-target="modal2" class="modal_switch"><span>問い合わせページへ</span></a></p>
+          </div>
+         
+          <p><a class="modal_close"><i class="zmdi zmdi-close"></i></a></p>
+        </div> 
+
+          <!-- モーダル2 -->
+           <div id="modal2" class="modal_box">
+            <h2>問い合わせページ</h2>
+   
+             <p>お問い合わせは下記から<br />akiyaばりぐっどくんをみたと伝えてね<br />西海市でまってます</p>
+   
+          <div class="link_area">
+              <ul>
+              <li class="modal_link"><a data-target="modal1" class="modal_switch"><span>物件一覧へもどる</span></a></li>
+              <li class="modal_link"><a data-target="modal3" class="modal_switch"><span>イチオシ物件をみる</span></a></li>;
+            </ul>
+              </div>
+          <p><a class="modal_close"><i class="zmdi zmdi-close"></i></a></p>
+        </div>
+           <!-- モーダル3 -->
+        <div id="modal3" class="modal_box">
+            <h2>イチオシ物件</h2>
+           
+            <div class="link_area">
+              <p class="modal_link"><a data-target="modal2" class="modal_switch"><span>問い合わせページへ</span></a></p>
+            </div>
+           
+            <p><a class="modal_close"><i class="zmdi zmdi-close"></i></a></p>
+          </div>
+
+        
+    <!-- <div id="map2"></div> -->
+
  <button></button>
   <!-- Map -->
 
@@ -37,13 +219,8 @@
     var map; //mapオブジェクト保管用
     var marker; 
     var infoWindow; //吹き出し
-    var infoWindow1; //吹き出し
-    var infoWindow2; //吹き出し
-
-    //追加    配列の受け取り
-     var data = {{data|tojson}};
-     console.log(data); 
-
+    var data = {{data|tojson}}; //main.pyから配列受け取り
+    var mapstyle =  style;      //mapstyle.js読み込みたい   未定    
 
     //1．位置情報の取得に成功した時の処理
     function mapsStart(position) {
@@ -52,333 +229,63 @@
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
 
-     
-
-
-      // オランダの緯度経度をlat2とlon2でセット
+      //  オランダの緯度経度をlat2とlon2でセット のちのセンター表示で使用
       var lat2 = 32.995315; 
       var lon2 = 129.758527;
-
-      //物件a
-      var lat3 = 32.995330; 
-      var lon3 = 129.758560;
-
-      //物件b
-      var lat4 = 32.895330;; 
-      var lon4 = 129.558560;
 
       //div#mapを「GoogleMap」化
       map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: lat2, lng: lon2 }, //緯度,経度を設定
         zoom: 13, //Zoom値設定
         //style 
-        styles:
-        [
-     {
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#ebe3cd"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#523735"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "color": "#f5f1e6"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#c9b2a6"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#dcd2be"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#ae9e90"
-      }
-    ]
-  },
-  {
-    "featureType": "landscape.natural",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dfd2ae"
-      }
-    ]
-  },
-  {
-    "featureType": "landscape.natural",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#749d6b"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dfd2ae"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#93817c"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#a5b076"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#447530"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#f5f1e6"
-      }
-    ]
-  },
-  {
-    "featureType": "road.arterial",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#fdfcf8"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#f8c967"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#e9bc62"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway.controlled_access",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#e98d58"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway.controlled_access",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#db8555"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#806b63"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dfd2ae"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#8f7d77"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "color": "#ebe3cd"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.station",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dfd2ae"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#b9d3c2"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#92998d"
-      }
-    ]
-  }
-]
-        //styleここまで
+        styles:mapstyle
       });
 
+  
 
    //配列表記
-  // var data = new Array();
-      var data1 = data;
-       data1.push({lat:'33.005963', lng:'129.814619', name:'無人島田島　片山智弘'});
-      // data.push({lat:'32.993740', lng:'129.810136', name:'SDGsナビゲーター　長谷川星香'});
-      // data.push({lat:'32.992381', lng:'129.808606', name:'国際宇宙ステーションの人　長谷川純一'});
-      // data.push({lat:'32.971183', lng:'129.823176', name:'建築家池田武邦の終のすみか　池田武邦'});
-      // data.push({lat:'33.007290', lng:'129.791708', name:'フィトセラピスト　村山みほ'});
-      // data.push({lat:'32.989228', lng:'129.782924', name:'ハウステンボス創設者　神近義邦'});
-      console.log(data1); 
-      //配列表記ここまで
-
-    //   //変数 map2の定義
-    // map2 = new google.maps.Map(document.getElementById("maps"), map);
+      var data1 = data; //配列を受け取ってdata1に入れ替え
+      data1.push({lat:'33.005963', lng:'129.814619', name:'無人島田島　片山智弘'});
+          console.log(data1);   //配列の更新確認
 
     // マーカーの作成（0からデータの数分まで）
     for (i = 0; i < data.length; i++) {
      　create_marker(data[i].lat, data[i].lng);
      }
 
-      // 関数 create_marker
+     // 関数定義 create_marker
       function create_marker(lat, lng){
       　//変数 marker_options
       　var marker_options = {
         　map: map,
-          position: new google.maps.LatLng(lat, lng),
-          zIndex: 0,        };
+         icon: 'img/vgboy.png',
+         title:'物件',
+          position: new google.maps.LatLng(lat, lng)
+               };
         // 変数 marker
-        var marker = new google.maps.Marker(marker_options);
-      }
+         var marker = new google.maps.Marker(marker_options);
+          //  icon: 'img/maps_pin.png'   
+            
+         var marker_options2 ={
+          
+         };
+         marker.setOptions(marker_options2);
 
-
-
-        //1.5 プッシュピンを置く
+    //プッシュピンを置く
     const beachMarker = new google.maps.Marker({
-        position: { lat: lat2 + 0.001, lng: lon2 + 0.001 },
+      position: new google.maps.LatLng(lat, lng),
         map: map,
-        icon: 'img/maps_pin.png'      
       });
-    
-              //物件の場所にピンを置く
-              const beachMarker1 = new google.maps.Marker({
-                position: { lat: lat3 + 0.005, lng: lon3 + 0.005 },
-                map: map,
-                icon: 'img/vgboy.png'
-              });
 
-               //物件の場所にピンを置く
-               const beachMarker2 = new google.maps.Marker({
-                position: { lat: lat4 + 0.005, lng: lon4 + 0.005 },
-                map: map,
-                icon: 'img/vgboy.png'
-              });
-
-              // マーカー吹き出しに追加
-              infoWindow = new google.maps.InfoWindow({ // 吹き出しの追加
-                            content: '<div class="sample">SCC オフィス</div>' // 吹き出しに表示する内容
+        // マーカー吹き出しに追加
+        infoWindow = new google.maps.InfoWindow({ // 吹き出しの追加
+                            content: '<div class="sample" id="detail">物件詳細をみる</div>' // 吹き出しに表示する内容
                       });
                       beachMarker.addListener('click', function() { // マーカーをクリックしたとき
                       infoWindow.open(map, beachMarker); // 吹き出しの表示
-                  });
-                                  //あとで削除
-                                        infoWindow1 = new google.maps.InfoWindow({ // 吹き出しの追加
-                                            content: '<div class="sample">2LDK 築5年 一軒家</div>' // 吹き出しに表示する内容
-                                      });
-                                      beachMarker1.addListener('click', function() { // マーカーをクリックしたとき
-                                      infoWindow.open(map, beachMarker1); // 吹き出しの表示
-                                  });
-
-                                     infoWindow2 = new google.maps.InfoWindow({ // 吹き出しの追加
-                                            content: '<div class="sample">4LDK</div>' // 吹き出しに表示する内容
-                                      });
-                                      beachMarker2.addListener('click', function() { // マーカーをクリックしたとき
-                                      infoWindow.open(map, beachMarker2); // 吹き出しの表示
-                                  });
-
+                  });   
+           }
     };
-
 
           //2． 位置情報の取得に失敗した場合の処理
           function mapsError(error) {
@@ -405,11 +312,90 @@
           //Main:位置情報を取得する処理 //getCurrentPosition :or: watchPosition
           function initMap() {
             navigator.geolocation.watchPosition(mapsStart, mapsError, set);
+
+             
           }
 
 
-       
+
+  </script>
+
+
+<!-- 物件一覧モーダル ここから-->
+  <script>
+    $(function(){
+     // 「.modal_open」をクリックしたらモーダルと黒い背景を表示する
+      $('.modal_open').click(function(){
+  
+     // 黒い背景をbody内に追加
+     $('body').append('<div class="modal_bg"></div>');
+     $('.modal_bg').fadeIn();
+  
+     // data-targetの内容をIDにしてmodalに代入
+     var modal = '#' + $(this).attr('data-target');
+  
+     // モーダルをウィンドウの中央に配置する
+     function modalResize(){
+         var w = $(window).width();
+         var h = $(window).height();
+  
+         var x = (w - $(modal).outerWidth(true)) / 2;
+         var y = (h - $(modal).outerHeight(true)) / 2;
+  
+         $(modal).css({'left': x + 'px','top': y + 'px'});
+     }
+  
+     // modalResizeを実行
+     modalResize();
+  
+     // modalをフェードインで表示
+     $(modal).fadeIn();
+  
+     // .modal_bgか.modal_closeをクリックしたらモーダルと背景をフェードアウトさせる
+     $('.modal_bg, .modal_close').off().click(function(){
+         $('.modal_box').fadeOut();
+         $('.modal_bg').fadeOut('slow',function(){
+             $('.modal_bg').remove();
+         });
+     });
+  
+     // ウィンドウがリサイズされたらモーダルの位置を再計算する
+     $(window).on('resize', function(){
+         modalResize();
+     });
+  
+     // .modal_switchを押すとモーダルを切り替える
+     $('.modal_switch').click(function(){
+  
+       // 押された.modal_switchの親要素の.modal_boxをフェードアウトさせる
+       $(this).parents('.modal_box').fadeOut();
+  
+       // 押された.modal_switchのdata-targetの内容をIDにしてmodalに代入
+       var modal = '#' + $(this).attr('data-target');
+  
+       // モーダルをウィンドウの中央に配置する
+       function modalResize(){
+           var w = $(window).width();
+           var h = $(window).height();
+  
+           var x = (w - $(modal).outerWidth(true)) / 2;
+           var y = (h - $(modal).outerHeight(true)) / 2;
+  
+           $(modal).css({'left': x + 'px','top': y + 'px'});
+       }
+  
+       // modalResizeを実行
+       modalResize();
+  
+       $(modal).fadeIn();
+  
+       // ウィンドウがリサイズされたらモーダルの位置を再計算する
+       $(window).on('resize', function(){
+           modalResize();
+       });
+     });
+   });
+ });
   </script>
 </body>
-
 </html>
