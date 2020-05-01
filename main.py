@@ -3,6 +3,7 @@ import csv
 import json
 from pygeocoder import Geocoder
 import googlemaps
+import re
 
 app= Flask(__name__)
 
@@ -10,7 +11,7 @@ app= Flask(__name__)
 import requests
 from bs4 import BeautifulSoup as bs4
 import pandas as pd
-from google.colab import files
+#from google.colab import files
 
 #html_doc = requests.get("https://www.city.saikai.nagasaki.jp/kurashi/jutaku/2/2377.html").text
 #soup = BeautifulSoup(html_doc, 'html.parser') # BeautifulSoupの初期化
@@ -61,7 +62,7 @@ print(df3_fix)
 # result.csvという名前でCSVに出力してください。
 filename = "result.csv"
 df3_fix.to_csv(filename, encoding = 'utf-8-sig') #encoding指定しないと、エラーが起こります。おまじないだともって入力します。
-files.download(filename)
+#files.download(filename)
 
 
 # ------スクレイピングここまで--------------
@@ -92,7 +93,7 @@ def main():
                 a=row[2].strip('</p>\xa0')
                 b=a.replace('\xa0（中戸）','')
                 names.append(b) #csvで3つ目の列に住所が入っているという想定
-                print(names)
+#                print(names)
 
             else:
                 continue
@@ -113,8 +114,52 @@ def main():
                 except:
                     print('ERROR') # エラー処理はひとまずまとめておく
 
-#  index.htmlに出力（HTMLに名前と緯度経度を渡す　表示はrender_templateを使う）
-        return render_template("index.html", GoogleMapApiKey=googlemapapikey , data=loc_data)
+# ここから空き家詳細情報を取る処理
+
+    # houselist.csvから値をとる
+    with open('houselist.csv', newline='', encoding='shift-jis') as house_csv_data:
+        housedatareader = csv.reader(house_csv_data, delimiter=',', lineterminator='\r\n')
+        house_data = {}
+        for row in housedatareader:
+            house_id = 'house'+row[0]
+
+            # 間取りの箇所で、リンクがあればそのURLを抜き出す
+            url_format = r'href=.*pdf'
+            urltext = re.findall(url_format, row[8])
+            #print(urltext)
+            flrtext = ""
+            for f in urltext:
+                flrtext = flrtext + f
+
+            if( urltext != []): # urltextに何か入っている　＝間取りがリンクになっていた場合
+                flr = flrtext.replace('href=','') #リンクのURL中身を抜き出してflrに代入
+            else: #間取りがリンクになっていない
+                flr = row[8] # 元の値をそのまま入れておく
+
+            house_info = {
+                'id':row[0],
+                'address':row[1],
+                'register_date':row[2],
+                'category':row[3],
+                'price':row[4],
+                'architecture':row[5],
+                'ancillary_properties':row[6],
+                'age':row[7],
+                'floor':flr,
+                'facility':row[9],
+                'parking':row[10],
+                'house_condition':row[11],
+                'mention':row[12],
+                'photo1':row[13],
+                'photo2':row[14],
+                'photo3':row[15],
+                'appeal':row[16]
+                }
+            house_data.update({house_id:house_info})
+
+#  index.htmlにAPIKeyと名前・緯度・経度のリスト、モーダルウィンドウ表示用の空き家一覧情報を渡す
+    return render_template("index.html", GoogleMapApiKey=googlemapapikey , data=loc_data, house_detail=house_data)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
