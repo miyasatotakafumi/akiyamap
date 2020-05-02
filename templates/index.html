@@ -9,20 +9,20 @@
       margin: 0;
       padding: 0;
     }
-    #top {
+    /* #top {
       position: absolute;
       top:0px;
       left: 0px;
       width: 1640px;
       height: 20px;
-    }
+    } */
 
     #map {
       position: absolute;
-      top: 60px;
+      top: 100px;
       left: 0px;
       width: 1640px;
-      height: 1500px;
+      height: 800px;
     }   
 
     /* css */
@@ -75,12 +75,12 @@
  
 .modal_bg {
     position: fixed;
-    top: 0;
+    top: 60px;
     left: 0;
     z-index: 6666;
     display: none;
-    width: 100%;
-    height: 120%;
+    width: 90%;
+    height: 90%;
     background-color: rgba(0,0,0,0.7);
 }
  
@@ -154,7 +154,7 @@
   </style>
    <script src="https://maps.googleapis.com/maps/api/js?key={{GoogleMapApiKey}}&callback=initMap" async defer></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-   <script type="text/javascript" src="templates/mapstyle.js"></script>
+   <!-- <script type="text/javascript" src="mapstyle.js"></script> -->
    <!--   <link rel="stylesheet" type="text/css" href="style.css" media="screen" /> -->
    <script src="func.js"></script> 
 </head>
@@ -175,11 +175,14 @@
          <div id="modal1" class="modal_box">
           <h2>物件一覧</h2>
           <p>物件一覧ページ</p>
-         
           <div class="link_area">
-            <p class="modal_link"><a data-target="modal2" class="modal_switch"><span>問い合わせページへ</span></a></p>
+            <!-- 物件一覧表示挿入箇所 -->
+              <div class="list_class">
+              
+              </div>
+            <!-- 物件一覧表示挿入箇所 ここまで-->
+              <p class="modal_link"><a data-target="modal2" class="modal_switch"><span>問い合わせページへ</span></a></p>
           </div>
-         
           <p><a class="modal_close"><i class="zmdi zmdi-close"></i></a></p>
         </div> 
 
@@ -220,7 +223,7 @@
     var marker; 
     var infoWindow; //吹き出し
     var data = {{data|tojson}}; //main.pyから配列受け取り
-    var mapstyle =  style;      //mapstyle.js読み込みたい   未定    
+    // var mapstyle =  style;      //mapstyle.js読み込みたい  
 
     //1．位置情報の取得に成功した時の処理
     function mapsStart(position) {
@@ -236,16 +239,15 @@
       //div#mapを「GoogleMap」化
       map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: lat2, lng: lon2 }, //緯度,経度を設定
-        zoom: 13, //Zoom値設定
+        zoom: 13 //Zoom値設定
         //style 
-        styles:mapstyle
+        // styles:mapstyle
       });
 
-  
 
    //配列表記
       var data1 = data; //配列を受け取ってdata1に入れ替え
-      data1.push({lat:'33.005963', lng:'129.814619', name:'無人島田島　片山智弘'});
+      // data1.push({lat:'33.005963', lng:'129.814619', name:'無人島田島　片山智弘'});
           console.log(data1);   //配列の更新確認
 
     // マーカーの作成（0からデータの数分まで）
@@ -258,7 +260,7 @@
       　//変数 marker_options
       　var marker_options = {
         　map: map,
-         icon: 'img/vgboy.png',
+        //  icon: 'img/vgboy.png',
          title:'物件',
           position: new google.maps.LatLng(lat, lng)
                };
@@ -322,15 +324,26 @@
 
 
 <!-- 物件一覧モーダル ここから-->
+  
+
   <script>
+     const list0 = data; //locデータの読み込み
+     const list = 
     $(function(){
      // 「.modal_open」をクリックしたらモーダルと黒い背景を表示する
       $('.modal_open').click(function(){
-  
+        
      // 黒い背景をbody内に追加
      $('body').append('<div class="modal_bg"></div>');
      $('.modal_bg').fadeIn();
-  
+      console.log(list0);
+       for (i = 0; i < data.length; i++) {
+         loclist =data[i].loc;
+         $('.list_class').append("<p>"+loclist+"</p>");
+      }
+    
+
+
      // data-targetの内容をIDにしてmodalに代入
      var modal = '#' + $(this).attr('data-target');
   
