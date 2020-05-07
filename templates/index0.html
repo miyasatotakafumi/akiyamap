@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map & Geolocation</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+  <style>
+   body {
+      margin: 0;
+      padding: 0;
+    }
+    /* #top {
+      position: absolute;
+      top:0px;
+      left: 0px;
+      width: 1640px;
+      height: 20px;
+    } */
+
+    #map {
+      position: absolute;
+      top: 100px;
+      left: 0px;
+      width: 1640px;
+      height: 700px;
+      z-index: 0;
+    }   
+
+    /* css */
+
+.main_visual bg_aaa{
+    position: absolute; 
+      top: 50px;
+      bottom: 50px;
+      /* left: 0px; */
+      width: 80%;
+      height:20px;
+      left: 10%;
+      right:10%;
+      margin: 0 auto;
+}
+      
+.modal_open{
+  /* position: absolute; */
+  /* left: 0%;
+  right:0%; */
+  top:   3px;
+  height: 70px;
+  width: 80%;
+    /* display: inline-block; */
+    margin: 0 auto;
+    /* float: left;  */
+    background: #1152FD;
+    color:#ffffff;
+    font-size: 25px;
+    box-shadow: 0px 2px 8px rgba(16, 105, 227, 0.3);
+    border-radius: 15px;
+    z-index: 10000;
+}
+ 
+.modal_box {
+    position: fixed;
+    z-index: 7777;
+    display: none;
+    width: 80%;
+    max-width: 840px;
+    margin: 0;
+    padding: 60px 2vw 80px;
+    border: 2px solid #aaa;
+    text-align: center;
+    background: #fff;
+    box-sizing: border-box;
+}
+ 
+.modal_close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    width: 62px;
+    font-size: 46px;
+    color: #000;
+    line-height: 62px;
+    text-align: center;
+    background: #e6e6e6;
+}
+ 
+.modal_close i {
+    line-height: 62px;
+    vertical-align: bottom;
+}
+ 
+.modal_bg {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    z-index: 6666;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+}
+ 
+.link_area {
+    overflow: hidden;
+    max-width: 410px;
+    margin: 60px auto 0;
+    text-align: center;
+}
+ 
+.link_area .modal_link {
+    display: inline;
+}
+ 
+.link_area .modal_link a {
+    display: inline-block;
+    width: 180px;
+    color: #000;
+    line-height: 2.5;
+    text-decoration: none;
+    margin: 0 10px;
+    background: #e6e6e6;
+}
+ 
+.link-area ul li.modal_link:first-child a {
+    float: left;
+}
+ 
+.link-area ul li.modal_link:last-child a {
+    float: right;
+}
+.mapfooter{
+  position: absolute;
+height: 500px;
+top:800px;
+left: 0px;
+right: 0px;
+width: 100%;
+bottom: 0px;
+background: #FFFFFF;
+/* background: #D5DDE0; */
+box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.1);
+border-radius: 24px;
+}
+ 
+ 
+@media screen and (max-width: 769px) {
+ 
+/*  ウィンドウサイズ769px以下の時のスタイル  */
+ 
+  .modal_box {
+      padding: 50px 2vw 40px;
+  }
+ 
+  .modal_close {
+      width: 40px;
+      line-height: 40px;
+      font-size: 30px;
+  }
+ 
+  .modal_close i {
+      line-height: 44px;
+  }
+ 
+  .link_area {
+      margin: 25px auto 0;
+  }
+ 
+  .link_area .modal_link a {
+      margin: 15px auto 0;
+  }
+ 
+  .link_area ul li.modal_link:first-child a {
+      float: none;
+      margin-top: 0;
+  }
+ 
+  .link_area ul li.modal_link:last-child a {
+      float: none;
+  }
+ }
+
+/* (ここから)モーダルテーブルのスタイル */
+ th,td{
+  padding: 5px 5px;
+}
+th{
+  width: 50px;
+  background-color: #ddd;
+  border-right: 1px dotted #fff;
+}
+th.border-none{
+  border-right: none;
+}
+td{
+  width: 300px;
+  border-bottom: 1px solid #aaa;
+  text-align: center;
+}
+/* (ここまで)モーダルテーブルのスタイル */
+
+
+
+  </style>
+   <script src="https://maps.googleapis.com/maps/api/js?key={{GoogleMapApiKey}}&callback=initMap" async defer></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <!-- <script type="text/javascript" src="mapstyle.js"></script> -->
+   <!-- <script src="func.js"></script>  -->
+</head>
+
+<body>
+
+  <!-- Map -->
+  <!-- <div id="top">
+    <button id=".modal_open">物件一覧を表示する</button></div> -->
+  <div id="map" >
+    </div>
+<!-- モーダル -->
+       <div id="demoslide01" class="main_visual bg_aaa">
+          <button class="modal_open"><a data-target="modal1">物件一覧を見る</a></button>
+        </div>
+        <div>
+          <button><a href="./index2.html">別ページリンク</button>
+        </div>
+        <div class="mapfooter">
+            <h4 class="modal_open">お問い合わせ</h4>
+        </div>
+         
+        <!-- モーダル1 -->
+         <div id="modal1" class="modal_box">
+          <h2>物件一覧</h2>
+          <p>物件一覧ページ</p>
+          <div class="link_area">
+            <!-- 物件一覧表示挿入箇所 -->
+              <div class="list_class">
+              
+              </div>
+            <!-- 物件一覧表示挿入箇所 ここまで-->
+              <p class="modal_link"><a data-target="modal2" class="modal_switch"><span>問い合わせページへ</span></a></p>
+          </div>
+          <p><a class="modal_close"><i class="zmdi zmdi-close"></i></a></p>
+        </div> 
+
+          <!-- モーダル2 -->
+           <div id="modal2" class="modal_box">
+            <h2>問い合わせページ</h2>
+   
+             <p>お問い合わせは下記から<br />akiyaばりぐっどくんをみたと伝えてね<br />西海市でまってます</p>
+   
+          <div class="link_area">
+              <ul>
+              <li class="modal_link"><a data-target="modal1" class="modal_switch"><span>物件一覧へもどる</span></a></li>
+              <li class="modal_link"><a data-target="modal3" class="modal_switch"><span>イチオシ物件をみる</span></a></li>;
+            </ul>
+              </div>
+          <p><a class="modal_close"><i class="zmdi zmdi-close"></i></a></p>
+        </div>
+           <!-- モーダル3 -->
+        <div id="modal3" class="modal_box">
+            <h2>イチオシ物件</h2>
+           
+            <div class="link_area">
+              <p class="modal_link"><a data-target="modal2" class="modal_switch"><span>問い合わせページへ</span></a></p>
+            </div>
+           
+            <p><a class="modal_close"><i class="zmdi zmdi-close"></i></a></p>
+          </div>
+
+        
+    <!-- <div id="map2"></div> -->
+
+ <button></button>
+  <!-- Map -->
+
+ 
+  <script>
+    var map; //mapオブジェクト保管用
+    var marker; 
+    var infoWindow; //吹き出し
+    var data = {{data|tojson}}; //main.pyから配列受け取り
+    var housedata ={{house_detail|tojson}}; //main.pyからhouselist受け取り
+    // var mapstyle =  style;      //mapstyle.js読み込みたい  
+
+    //1．位置情報の取得に成功した時の処理
+    function mapsStart(position) {
+
+      //lat=緯度、lon=経度 を取得 
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+
+      //  西海市役所の緯度経度をlat2とlon2でセット のちのセンター表示で使用
+      var lat2 = 32.933022; 
+      var lon2 = 129.642878;
+
+      //div#mapを「GoogleMap」化
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: lat2, lng: lon2 }, //緯度,経度を設定
+        zoom: 11.5 ,//Zoom値設定 
+        styles:[
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#bdbdbd"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#eeeeee"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e5e5e5"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#ffffff"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#dadada"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e5e5e5"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#eeeeee"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#c9c9c9"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  }
+]
+      });
+
+
+   //配列表記
+      var data1 = data; //配列を受け取ってdata1に入れ替え
+      // data1.push({lat:'33.005963', lng:'129.814619', name:'無人島田島　片山智弘'});
+
+
+    // マーカーの作成（0からデータの数分まで）
+    for (i = 0; i < data.length; i++) {
+     　create_marker(data[i].lat, data[i].lng);
+     }
+
+     // 関数定義 create_marker
+      function create_marker(lat, lng){
+      　//変数 marker_options
+      　var marker_options = {
+        　map: map,
+        //  icon: 'img/vgboy.png',
+         title:'物件',
+          position: new google.maps.LatLng(lat, lng)
+               };
+        // 変数 marker
+         var marker = new google.maps.Marker(marker_options);
+          //  icon: 'img/maps_pin.png'   
+            
+         var marker_options2 ={
+          
+         };
+         marker.setOptions(marker_options2);
+
+    //プッシュピンを置く
+    const beachMarker = new google.maps.Marker({
+      position: new google.maps.LatLng(lat, lng),
+        map: map,
+      });
+
+        // マーカー吹き出しに追加
+        infoWindow = new google.maps.InfoWindow({ // 吹き出しの追加
+                            content: '<div class="sample" id="detail">物件詳細をみる</div>' // 吹き出しに表示する内容
+                      });
+                      beachMarker.addListener('click', function() { // マーカーをクリックしたとき
+                      infoWindow.open(map, beachMarker); // 吹き出しの表示
+                  });   
+           }
+    };
+
+          //2． 位置情報の取得に失敗した場合の処理
+          function mapsError(error) {
+            var e = "";
+            if (error.code == 1) { //1＝位置情報取得が許可されてない（ブラウザの設定）
+              e = "位置情報が許可されてません";
+            }
+            if (error.code == 2) { //2＝現在地を特定できない
+              e = "現在位置を特定できません";
+            }
+            if (error.code == 3) { //3＝位置情報を取得する前にタイムアウトになった場合
+              e = "位置情報を取得する前にタイムアウトになりました";
+            }
+            alert("エラー：" + e);
+          };
+
+          //3.位置情報取得オプション
+          var set = {
+            enableHighAccuracy: true, //より高精度な位置を求める
+            maximumAge: 20000,        //最後の現在地情報取得が20秒以内であればその情報を再利用する設定
+            timeout: 10000            //10秒以内に現在地情報を取得できなければ、処理を終了
+          };
+
+          //Main:位置情報を取得する処理 //getCurrentPosition :or: watchPosition
+          function initMap() {
+            navigator.geolocation.watchPosition(mapsStart, mapsError, set);
+
+             
+          }
+
+
+
+  </script>
+
+
+<!-- 物件一覧モーダル ここから-->
+  
+
+  <script>
+     const list0 = data; //locデータの読み込み
+     const houselist =  housedata; //house_detailの読み込み
+    //表示する物件詳細リストの表示形式
+     const testhousedetail1 =
+     houselist["househouse1"]["register_date"]
+     +"<br>"
+     +houselist["househouse1"]["price"]
+      +"<br>"
+      +houselist["househouse1"]["architecture"];
+
+    const obj = housedata;
+
+    //consoleで確認用
+    for(var item in obj["househouse1"]){
+      console.log("キー"+item);
+      console.log("値："+obj["househouse1"][item]);
+    }
+
+    $(function(){
+     // 「.modal_open」をクリックしたらモーダルと黒い背景を表示する
+      $('.modal_open').click(function(){
+        
+     // 黒い背景をbody内に追加
+     $('body').append('<div class="modal_bg"></div>');
+     $('.modal_bg').fadeIn();
+
+                // const testhousedetail =houselist.househouse1.architecture 
+                //             + houselist.househouse1.register_date 
+                //             + houselist.househouse1.price
+                //             + houselist.househouse1.ancillary_properties
+                //             + houselist.househouse1.appeal
+                //             + houselist.househouse1.parking;
+
+    //   for(var item in obj["househouse1"]){
+    //   $('.list_class').append("<span>"+""+""+obj["househouse1"][item]+""+""+"</span>");
+    //   // console.log("キー"+item);
+    //   // console.log("値："+obj["househouse1"][item]);
+    // }
+
+
+// (重要)
+          //試し 表示 
+          for(var item in obj["househouse1"]){
+            $('.list_class').append(
+              "<table>"
+               +"<tr>"
+                +"<th>"+"説明"
+                +"</th>"
+                +"<td>"+obj["househouse1"][item]
+                +"</td>"
+                +"</tr>"
+                +"</table>")
+          }
+
+    //試し 表示ここまで
+
+
+        //表示のテストは以下  
+        //  $('.list_class').append("<p>"+testhousedetail1+"</p>");
+
+
+    //house_detailデータの一覧表示 ※ただしまだできていない
+          for (i = 0; i < houselist.length; i++) {
+            //  houselist0 =hoselist[i].id;   //+ houselist[i].age ;
+            $('.list_class').append("<p>"+houselist[i]+"</p>");      
+          }
+      
+    //locデータの一覧表示
+      // これはあとで使える！！
+      //  for (i = 0; i < data.length; i++) {
+      //    loclist =data[i].loc;
+      //    $('.list_class').append("<p>"+loclist+"</p>");
+      // }
+       
+
+
+     // data-targetの内容をIDにしてmodalに代入
+     var modal = '#' + $(this).attr('data-target');
+  
+     // モーダルをウィンドウの中央に配置する
+     function modalResize(){
+         var w = $(window).width();
+         var h = $(window).height();
+  
+         var x = (w - $(modal).outerWidth(true)) / 2;
+         var y = (h - $(modal).outerHeight(true)) / 2;
+  
+         $(modal).css({'left': x + 'px','top': y + 'px'});
+     }
+  
+     // modalResizeを実行
+     modalResize();
+  
+     // modalをフェードインで表示
+     $(modal).fadeIn();
+  
+     // .modal_bgか.modal_closeをクリックしたらモーダルと背景をフェードアウトさせる
+     $('.modal_bg, .modal_close').off().click(function(){
+         $('.modal_box').fadeOut();
+         $('.modal_bg').fadeOut('slow',function(){
+             $('.modal_bg').remove();
+         });
+     });
+  
+     // ウィンドウがリサイズされたらモーダルの位置を再計算する
+     $(window).on('resize', function(){
+         modalResize();
+     });
+  
+     // .modal_switchを押すとモーダルを切り替える
+     $('.modal_switch').click(function(){
+  
+       // 押された.modal_switchの親要素の.modal_boxをフェードアウトさせる
+       $(this).parents('.modal_box').fadeOut();
+  
+       // 押された.modal_switchのdata-targetの内容をIDにしてmodalに代入
+       var modal = '#' + $(this).attr('data-target');
+  
+       // モーダルをウィンドウの中央に配置する
+       function modalResize(){
+           var w = $(window).width();
+           var h = $(window).height();
+  
+           var x = (w - $(modal).outerWidth(true)) / 2;
+           var y = (h - $(modal).outerHeight(true)) / 2;
+  
+           $(modal).css({'left': x + 'px','top': y + 'px'});
+       }
+  
+       // modalResizeを実行
+       modalResize();
+  
+       $(modal).fadeIn();
+  
+       // ウィンドウがリサイズされたらモーダルの位置を再計算する
+       $(window).on('resize', function(){
+           modalResize();
+       });
+     });
+   });
+ });
+  </script>
+</body>
+</html>
