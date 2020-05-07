@@ -86,6 +86,8 @@ def main():
         datareader = csv.reader(csv_data, delimiter=',', lineterminator='\r\n')
         name_data = [[]]
         names = []
+        id_data = [[]]
+        ids = []
         for row in datareader:
             n = datareader.line_num
             if(n > 4 and n % 6 == 4):
@@ -93,35 +95,43 @@ def main():
                 a=row[2].strip('</p>\xa0')
                 b=a.replace('\xa0（中戸）','')
                 names.append(b) #csvで3つ目の列に住所が入っているという想定
-#                print(names)
-
+            elif(n > 8 and n % 6 == 2):
+                id_data.append(row)
+                c=row[2].strip('</p>')
+                ids.append(c)
+                print(ids)
             else:
                 continue
 
 # ここから緯度と経度を取る処理
+        num = 0
         for locationname in names:
 #                print(locationname)
                 try:
                     geocode_result = gmaps.geocode(locationname)
-#                   geocode_result = gmaps.geocode('大瀬戸町松島内郷352番地')
                 # loc
                     loc = locationname
                 # lat
                     lat = geocode_result[0]['geometry']['location']['lat']
                 # lng
                     lng = geocode_result[0]['geometry']['location']['lng']
-                    loc_data.append({'loc': loc, 'lat': lat, 'lng': lng})
+                # id
+                    id = ids[num]
+                    loc_data.append({'id' : id, 'loc': loc, 'lat': lat, 'lng': lng})
+                    num = num + 1
                 except:
                     print('ERROR') # エラー処理はひとまずまとめておく
 
 # ここから空き家詳細情報を取る処理
+    #index.htmlに渡す配列
+    house_list = {} 
 
     # houselist.csvから値をとる
     with open('houselist.csv', newline='', encoding='shift-jis') as house_csv_data:
         housedatareader = csv.reader(house_csv_data, delimiter=',', lineterminator='\r\n')
         house_data = {}
         for row in housedatareader:
-            house_id = 'house'+row[0]
+            house_id = row[0]
 
             # 間取りの箇所で、リンクがあればそのURLを抜き出す
             url_format = r'href=.*pdf'
@@ -152,19 +162,13 @@ def main():
                 'mention':row[12],
                 'photo1':row[13],
                 'photo2':row[14],
-                'photo3':row[15],
-                'appeal':row[16]
                 }
             house_data.update({house_id:house_info})
 
-#  index.htmlにAPIKeyと名前・緯度・経度のリスト、モーダルウィンドウ表示用の空き家一覧情報を渡す
+#  index.htmlにモーダルウィンドウ表示用の空き家一覧情報を渡す
     return render_template("index.html", GoogleMapApiKey=googlemapapikey , data=loc_data, house_detail=house_data)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
 
-# 検索Boxからの入力受け取り、値チェック
-
-# ページ更新
 # ------表示時の実行処理ここまで--------------
