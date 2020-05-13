@@ -156,9 +156,9 @@
   </style>
    <script src="https://maps.googleapis.com/maps/api/js?key={{GoogleMapApiKey}}&callback=initMap" async defer></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-   <!-- <script type="text/javascript" src="mapstyle.js"></script> -->
-   <!--   <link rel="stylesheet" type="text/css" href="style.css" media="screen" /> -->
-   <!-- <script src="func.js"></script>  -->
+   <!-- <script type="text/javascript" src="/static/js/mapstyle.js"></script> -->
+   <link rel="stylesheet" type="text/css" href="/static/css/style.css" media="screen" />
+   <!-- <script src="/static/js/func.js"></script>  -->
 </head>
 
 <body>
@@ -309,13 +309,13 @@
       　//変数 marker_options
       　var marker_options = {
         　map: map,
-        //  icon: 'img/vgboy.png',
+          icon: '/static/img/vgboy.png',
          title:'物件',
           position: new google.maps.LatLng(lat, lng)
                };
         // 変数 marker
          var marker = new google.maps.Marker(marker_options);
-          //  icon: 'img/maps_pin.png'   
+            icon: '/static/img/maps_pin.png'   
             
          var marker_options2 ={
           
