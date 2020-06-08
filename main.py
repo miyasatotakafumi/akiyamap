@@ -20,6 +20,9 @@ soup = bs4(res.content,'lxml')
 # print(soup.prettify())
 real_page_tags = soup.find_all("tr") # 記事内の全てのtrタグを取得
 
+columns = ["Image","Name1","Name2"]
+df2 = pd.DataFrame(columns=columns)
+
 for tr in real_page_tags:  # 繰り返しでtrタグの中のタグを取得
   tds = tr.find_all("td")
   # print(tds)
