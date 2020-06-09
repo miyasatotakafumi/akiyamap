@@ -6,67 +6,6 @@ import googlemaps
 import re
 
 app= Flask(__name__)
-
-# ----スクレイピング------------
-import requests
-from bs4 import BeautifulSoup as bs4
-import pandas as pd
-#from google.colab import files
-
-#html_doc = requests.get("https://www.city.saikai.nagasaki.jp/kurashi/jutaku/2/2377.html").text
-#soup = BeautifulSoup(html_doc, 'html.parser') # BeautifulSoupの初期化
-res = requests.get('https://www.city.saikai.nagasaki.jp/kurashi/jutaku/2/2377.html')
-soup = bs4(res.content,'lxml')
-# print(soup.prettify())
-real_page_tags = soup.find_all("tr") # 記事内の全てのtrタグを取得
-for tr in real_page_tags:  # 繰り返しでtrタグの中のタグを取得
-  tds = tr.find_all("td")
-  for td in tds:
-    # print(td.prettify())
-    # print(td.string)
-    # print(td.p)
-    # print(td.img)
-
-    # データフレームを作成してください。列名は、name, urlです。
-    # columns = ["写真", "所在地","区分","売却価格/賃料","構造","詳細"]
-    columns = ["img","name1","name2"]
-    df2 = pd.DataFrame(columns=columns) #列名を指定している
-
-# 記事名と記事URLをデータフレームに追加してください
-for tr in real_page_tags:  # 繰り返しでtrタグの中のタグを取得
-  tds = tr.find_all("td")
-  for td in tds:
-    # print(td.prettify())
-    # print(td.string)
-    # print(td.p)
-    # print(td.img)
-    img = td.img
-    name1 = td.string
-    name2 = td.p
-    se = pd.Series([img,name1,name2], columns)
-    # print(se)
-    df2 = df2.append(se, columns)
-    df3 = df2.reset_index().T.reset_index().T.values.tolist() #行・列を配列に変換
-# print([x for x in df3 if x != None]) #df3の配列に存在する空要素""を除去
-dst = [] #空の配列を設定
-for block in df3: #df3の中のblock(配列）を繰り返し以下を読み取る
-    new_block = [x for x in block if x != None] #blockの要素にNoneがあれば取り除く
-    dst.append(new_block) #空の配列にNoneを除いた配列を挿入
-df3 = dst #df3にdstを代入
-print(df3)
-
-columns_fix=["block","block2","block3","block4"]
-df3_fix = pd.DataFrame(df3,columns=columns_fix) #列名を指定している
-print(df3_fix)
-
-# result.csvという名前でCSVに出力してください。
-filename = "result.csv"
-df3_fix.to_csv(filename, encoding = 'utf-8-sig') #encoding指定しないと、エラーが起こります。おまじないだともって入力します。
-#files.download(filename)
-
-
-# ------スクレイピングここまで--------------
-
 # ------表示時の実行処理ここから--------------
 @app.route("/")
 
@@ -127,7 +66,7 @@ def main():
     house_list = {} 
 
     # houselist.csvから値をとる
-    with open('houselist.csv', newline='', encoding='shift-jis') as house_csv_data:
+    with open('houselist.csv', newline='', encoding='utf-8') as house_csv_data:
         housedatareader = csv.reader(house_csv_data, delimiter=',', lineterminator='\r\n')
         house_data = {}
         for row in housedatareader:
@@ -148,20 +87,20 @@ def main():
 
             house_info = {
                 'id':row[0],
-                'address':row[1],
-                'register_date':row[2],
-                'category':row[3],
-                'price':row[4],
-                'architecture':row[5],
-                'ancillary_properties':row[6],
-                'age':row[7],
+                'address':row[1].strip("</td>").strip("\n<p>\n</p>").replace("</p>\n<p>",""),
+                'age':row[2].strip("</td>\n</p>\n<p>"),
+                'architecture':row[3].strip("</td>\n</p>\n<p>").replace("</p>\n<p>",""),
+                'category':row[4].strip("</td>\n</p>\n<p>").replace("</p>\n<p>",""),
+                'house_condition':row[5].strip("</td>\n</p>\n<p>").replace("</p>\n<p>","\n"),
+                'register_date':row[6].strip("</td>\n</p>\n<p>"),
+                'facility':row[7].strip("</td>\n</p>\n<p>").replace("</p>\n<p>",""),
                 'floor':flr,
-                'facility':row[9],
-                'parking':row[10],
-                'house_condition':row[11],
-                'mention':row[12],
+                'mention':row[9].strip("</td>\n</p>\n<p>").replace("</p>\n<p>",""),
+                'parking':row[10].strip("</td>\n</p>\n<p>").replace("</p>\n<p>",""),
+                'price':row[11].strip("</td>\n</p>\n<p>").replace("</p>\n<p>","\n"),
+                'ancillary_properties':row[12].strip("</td>\n</p>\n<p>").replace("</p>\n<p>",""),
                 'photo1':row[13],
-                'photo2':row[14],
+                'photo2':row[14]
                 }
             house_data.update({house_id:house_info})
 
