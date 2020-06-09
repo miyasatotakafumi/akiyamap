@@ -4,7 +4,6 @@ import json
 from pygeocoder import Geocoder
 import googlemaps
 import re
-import os
 
 app= Flask(__name__)
 
@@ -66,56 +65,6 @@ df3_fix.to_csv(filename, encoding = 'utf-8-sig') #encoding指定しないと、�
 #files.download(filename)
 
 
-# ここから物件個別の詳細情報をスクレイピングする処理
-
-res_list = requests.get('https://www.city.saikai.nagasaki.jp/kurashi/jutaku/2/index.html')
-soup_list = bs4(res_list.content,'lxml')
-akiyaindex_data = soup_list.find_all('li', class_='page') # リンクの並んでいるpageをtagオブジェクトとして取得
-url_list=[] #物件NoとURLのリストの枠を用意
-for n in akiyaindex_data:
-  url = n.a.get("href") #hrefのリンク先URLをget
-  numbertext = n.text#tagオブジェクト内のテキスト情報を取得
-  number = numbertext.strip("空き家情報(詳細)\n") #数字以外は削除
-  if number.isdecimal(): #「空き家情報バンク」のトップページを抜いて、物件ナンバーに対するURLのみに絞る
-    url_list.append({'number' : number, 'url' : url})
-  else:
-    pass
-#print(url_list)
-
-filename2 = "houselist.csv"
-filepath = "./"+filename2
-if os.path.exists(filepath):
-    os.remove(filepath)
-
-# URLごとの処理開始
-for i in url_list:
-  detail = requests.get(url)
-  soup_detail = bs4(detail.content,'lxml')
-  tdtags = soup_detail.find_all('td')
- # print(tdtags)
-# imgの取得
-  img1tagdiv = soup_detail.find(class_="image left-col")
-  img2tagdiv = soup_detail.find(class_="image right-col")
- # あとで抽出しやすいように実データでない値のindexの頭には0をつけておく
-  tabledata = pd.Series(tdtags, index=["0syozai", "address","0sintikunen","age","0torokuhi","date","0madori","floor","0torokukubun","category","0setubi" ,"facility","0kakaku","price","0tyusyajo","parking","0kouzou","architecture","0nuukyo","condition","0hutai","properties","0sonota","mention"], name=i['number'])
-#  print(tabledata)
-  tabledata = tabledata.sort_index() # スクレイピング結果のtdタグデータをソートする
-  tabledata1 = tabledata[12:24] # 0がついたデータを抜いた
-  dataframe = pd.DataFrame([tabledata1]) # 行から列に変換、tabledata1を行にしたデータフレームを作成
-
-# 取得しておいたimgをデータフレームに追加
-  img1tag = img1tagdiv.find("img")
-  img1=img1tag["src"]
-  img2tag = img2tagdiv.find("img")
-  img2=img2tag["src"]
-
-  dataframe["photo1"] = [img1]
-  dataframe["photo2"] = [img2]
-
-# 詳細用のCSVファイル出力
-  dataframe.to_csv(filename2, mode='a',  header=False, index=True, encoding = 'utf-8-sig') 
-
-
 # ------スクレイピングここまで--------------
 
 # ------表示時の実行処理ここから--------------
@@ -150,7 +99,7 @@ def main():
                 id_data.append(row)
                 c=row[2].strip('</p>')
                 ids.append(c)
-#                print(ids)
+                print(ids)
             else:
                 continue
 
@@ -178,7 +127,7 @@ def main():
     house_list = {} 
 
     # houselist.csvから値をとる
-    with open('houselist.csv', newline='', encoding='utf-8') as house_csv_data:
+    with open('houselist.csv', newline='', encoding='shift-jis') as house_csv_data:
         housedatareader = csv.reader(house_csv_data, delimiter=',', lineterminator='\r\n')
         house_data = {}
         for row in housedatareader:
@@ -199,25 +148,25 @@ def main():
 
             house_info = {
                 'id':row[0],
-                'address':row[1].strip("</td><p>"),
-                'age':row[2].strip("</td><p>"),
-                'architecture':row[3].strip("</td><p>"),
-                'category':row[4].strip("</td><p>"),
-                'house_condition':row[5].strip("</td><p>"),
-                'register_date':row[6].strip("</td><p>"),
-                'facility':row[7].strip("</td><p>"),
+                'address':row[1],
+                'register_date':row[2],
+                'category':row[3],
+                'price':row[4],
+                'architecture':row[5],
+                'ancillary_properties':row[6],
+                'age':row[7],
                 'floor':flr,
-                'mention':row[9].strip("</td><p>"),
-                'parking':row[10].strip("</td><p>"),
-                'price':row[11].strip("</td><p>"),
-                'ancillary_properties':row[12].strip("</td><p>"),
+                'facility':row[9],
+                'parking':row[10],
+                'house_condition':row[11],
+                'mention':row[12],
                 'photo1':row[13],
-                'photo2':row[14]
+                'photo2':row[14],
                 }
             house_data.update({house_id:house_info})
 
 #  index.htmlにモーダルウィンドウ表示用の空き家一覧情報を渡す
-    return render_template("index6.html", GoogleMapApiKey=googlemapapikey , data=loc_data, house_detail=house_data)
+    return render_template("index.html", GoogleMapApiKey=googlemapapikey , data=loc_data, house_detail=house_data)
 
 if __name__ == "__main__":
     app.run(debug=True)
